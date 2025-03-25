@@ -31,3 +31,55 @@ exports.auth=async(req,res,next)=>{
         })
     }
 }
+
+exports.isStudent=async(req,res,next)=>{
+    try {
+        if(req.user.accountType!=="Student")
+        {
+            return res.status(401).josn({
+                success:false,
+                message:"This is a protected route for students"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"User role cannot be verified, Please try again"
+        })
+    }
+}
+exports.isAdmin=async(req,res,next)=>{
+    try {
+        if(req.user.accountType!=="Admin")
+        {
+            return res.status(401).josn({
+                success:false,
+                message:"This is a protected route for Admin"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"User role cannot be verified, Please try again"
+        })
+    }
+}
+exports.isInstructor=async(req,res,next)=>{
+    try {
+        if(req.user.accountType!=="Instructor")
+        {
+            return res.status(401).josn({
+                success:false,
+                message:"This is a protected route for Instructor"
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"User role cannot be verified, Please try again"
+        })
+    }
+}
