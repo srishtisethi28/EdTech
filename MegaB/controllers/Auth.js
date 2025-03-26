@@ -202,3 +202,44 @@ expports.login=async(req,res)=>{
     }
 }
 
+exports.changePassword=async(req,res)=>{
+    try {
+        const {email,password,newPassword}=req.body;
+
+        const user= await User.findOne({email})
+        if(!user)
+        {
+            return res.status(400).json({
+                success:false,
+                message:"User is not registered"
+            })
+        }
+        if(password!==user.password)
+        {
+            return res.status(400).json({
+                success:false,
+                message:"Incorrect Password"
+            })
+        }
+        const hashedPassword=await bcrypt.hash(newPassword,10);
+        await User.findOneAndUpdate(
+            {email:email},
+            {
+                password:hashedPassword
+            },
+            {new:true}
+        )
+
+        return res.status(200).json({
+            success:true,
+            message:"Password changed Successfully"
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:"Password Updation Failed, Please try again"
+        })
+    }
+}
