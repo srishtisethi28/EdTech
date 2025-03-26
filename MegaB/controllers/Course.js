@@ -1,5 +1,6 @@
 const User= require("../models/User")
 const Tag=require("../models/Tags")
+const Course=require("../models/Course")
 const {uploadImageTocloudinary}= require("../utils/ImageUploader")
 
 exports.createCourse=async(req,res)=>{
@@ -76,6 +77,24 @@ exports.createCourse=async(req,res)=>{
         return res.status(500).json({
             success:false,
             message:"Failed Creating Course"
+        })
+    }
+}
+
+exports.showAllCourses=async(req,res)=>{
+    try {
+        const allCourses= await Course.find({})
+        return res.status(200).json({
+            success:true,
+            message:"Data for All courses fetched successfully",
+            allCourses
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Error fetching All Courses",
+            error:error.message
         })
     }
 }
