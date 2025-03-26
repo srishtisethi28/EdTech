@@ -35,8 +35,11 @@ const courseSchema= new mongoose.Schema({
         required:true
     },
     tag:{
+        type:String
+    },
+    category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Tags"
+        ref:"Category"
     },
     studentsEnrolled:[
         {
