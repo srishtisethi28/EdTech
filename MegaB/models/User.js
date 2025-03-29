@@ -7,9 +7,9 @@ const userSchema= new mongoose.Schema({
         trim:true,
     },
     lastName:{
-        ype:String,
+        type:String,
         required:true,
-        trim:trusted,
+        trim:true,
     },
     email:{
         type:String,
@@ -26,7 +26,7 @@ const userSchema= new mongoose.Schema({
     resetPasswordExpires:{
         type:Date
     },
-    accountype:{
+    accountType:{
         type:String,
         enum:["Student","Admin","Instructor"],
         required:true,
@@ -53,5 +53,4 @@ const userSchema= new mongoose.Schema({
     ]
 
 })
-
-exports.module=mongoose.model("User",userSchema)
+module.exports = mongoose.model("User", userSchema);

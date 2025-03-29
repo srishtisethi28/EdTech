@@ -44,3 +44,41 @@ exports.showAllCategories= async(req,res)=>{
         })
     }
 }
+
+exports.categoryPageDetails= async(req,res)=>{
+    try {
+        const {categoryId}=req.body;
+
+        const selectedCategory= await Category.findById(categoryId)
+                                                .populate("courses")
+                                                .exec();
+        
+        if(!selectedCategory)
+        {
+            return res.status(404).json({
+                success:false,
+                message:"Category data not found"
+            })
+        }
+        
+        const differentCategory= await Category.findById({_id:{$ne:categoryId}})
+                                                .populate("courses")
+                                                .exex();
+        return res.status(200).json({
+            success:true,
+            message:"fetched category page details successfully",
+            data:{
+                selectedCategory,
+                differentCategory
+            }
+
+        })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}

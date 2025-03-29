@@ -77,3 +77,19 @@ exports.getAllUserDetails=async(req,res)=>{
         })
     }
 }
+
+exports.getAllEnolledCourses= async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+exports.updateDisplayPicture= async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}

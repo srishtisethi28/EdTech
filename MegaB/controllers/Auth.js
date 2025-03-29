@@ -69,7 +69,7 @@ exports.signUp=async(req,res)=>{
             otp
         }=req.body;
 
-        if(!firstName ||!lastName ||!email || !password ||!confirmPassword||!otp )
+        if(!firstName ||!lastName ||!email || !password ||!confirmPassword||!otp ||!accountType)
         {
             return res.status(403).json({
                 success:false,
@@ -85,7 +85,7 @@ exports.signUp=async(req,res)=>{
             })
         }
 
-        const existingUser= User.findOne({email})
+        const existingUser=await User.findOne({email})
         if(existingUser)
         {
             return res.status(400).json({
@@ -104,7 +104,7 @@ exports.signUp=async(req,res)=>{
             })
         }
 
-        if(otp!==recentOtp.otp)
+        if(otp!==recentOtp[0].otp)
         {
             return res.status(400).json({
                 success:false,
@@ -131,10 +131,12 @@ exports.signUp=async(req,res)=>{
             additionalDetails:profileDetails._id,
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
         }
+        const newUser = new User(user); // Create an instance
+        const savedUser = await newUser.save();
         return res.status(200).json({
             success:true,
             message:"User registered successfully",
-            user
+            savedUser
         })
     } catch (error) {
         console.log(error);
@@ -145,7 +147,7 @@ exports.signUp=async(req,res)=>{
     }
 }
 
-expports.login=async(req,res)=>{
+exports.login=async(req,res)=>{
     try {
         const {email,password}=req.body;
         if(!email || !password)
