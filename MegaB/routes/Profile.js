@@ -6,7 +6,7 @@ const {updateProfile,deleteAccount,getAllUserDetails,updateDisplayPicture}= requ
 
 router.put("/updateProfile",auth,updateProfile)
 router.delete("/deleteProfile",deleteAccount)
-router.get("/getAllUserDetails",auth,getAllUserDetails)
+router.get("/getUserDetails",auth,getAllUserDetails)
 //router.get("/getEnrolledCourses",auth,getEnrolledcourses)
 // router.put("/updateDisplayPicture",auth,updateDisplayPicture)
 module.exports=router
