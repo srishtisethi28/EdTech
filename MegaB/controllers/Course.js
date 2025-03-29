@@ -96,38 +96,45 @@ exports.getAllCourses=async(req,res)=>{
     }
 }
 
-exports.getCourseDetails=async(req,res)=>{
+exports.getCourseDetails = async (req, res) => {
     try {
-        const {courseId}=req.body;
-        const courseDetails=await Course.find({_id:courseId})
-                                            .populate("category")
-                                            .populate({
-                                                path:"instructor"
-                                                .populate("additionalDetails")
-                                            })
-                                            .populate("ratingsAndreviews")
-                                            .populate({
-                                                path:"courseContent"
-                                                .populate("subSection")
-                                            })
-                                            .exec();
-        if(!courseDetails)
-        {
-            return res.status(500).json({
-                success:false,
-                message:`Course details not found with ${courseId}`
+        // Use req.params or req.query instead of req.body for GET requests
+        const { courseId } = req.body;
+
+        // Fetch course details and populate related fields
+        const courseDetails = await Course.findOne({ _id: courseId })
+            .populate("category")
+            //.populate("ratingsAndreviews")
+            .populate({
+                path: "instructor",
+                populate: { path: "additionalDetails" }, // Corrected syntax
             })
+            .populate({
+                path: "courseContent",
+                populate: { path: "subSection" }, // Corrected syntax
+            })
+            .exec();
+
+        // If course is not found
+        if (!courseDetails) {
+            return res.status(404).json({
+                success: false,
+                message: `Course details not found with ID: ${courseId}`,
+            });
         }
+
         return res.status(200).json({
-            success:true,
-            message:"Course details fetched successfully",
-            data:courseDetails
-        })
+            success: true,
+            message: "Course details fetched successfully",
+            data: courseDetails,
+        });
 
     } catch (error) {
+        console.error("Error fetching course details:", error); // Log actual error
         return res.status(500).json({
-            success:false,
-            message:"Course details not fetched"
-        })
+            success: false,
+            message: "Course details not fetched",
+            error: error.message, // Send error message for debugging
+        });
     }
-}
+};
