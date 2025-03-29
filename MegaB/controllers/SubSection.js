@@ -54,7 +54,7 @@ exports.updateSubSection=async(req,res)=>{
                 message:"All fields are required"
             })
         }
-        const uploadDetails=await uploadImageTocloudinary(video,process.env.FOLDER_NAME);
+        const uploadDetails=await uploadImageToCloudinary(video,process.env.FOLDER_NAME);
         await SubSection.findByIdAndUpdate({_id:subSectionId},
             {
                 title,
@@ -67,7 +67,6 @@ exports.updateSubSection=async(req,res)=>{
         return res.status(200).json({
             success:true,
             message:"SubSection updated successfully",
-            updatedSectionDetails
         })
     } catch (error) {
         console.log(error)
