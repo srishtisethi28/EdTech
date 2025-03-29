@@ -114,7 +114,7 @@ exports.updateDisplayPicture = async (req, res) => {
         }
 
         // Upload image to Cloudinary
-        const result = uploadImageToCloudinary(imageFile,process.env.FOLDER_NAME);
+        const result =await uploadImageToCloudinary(imageFile,process.env.FOLDER_NAME);
 
         // Update user with new image URL
         const updatedUser = await User.findByIdAndUpdate(userId, { image: result.secure_url }, { new: true });

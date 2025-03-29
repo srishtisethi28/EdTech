@@ -98,24 +98,30 @@ exports.getAllCourses=async(req,res)=>{
 
 exports.getCourseDetails = async (req, res) => {
     try {
-        // Use req.params or req.query instead of req.body for GET requests
-        const { courseId } = req.body;
+        const { courseId } = req.body||req.params; 
 
-        // Fetch course details and populate related fields
-        const courseDetails = await Course.findOne({ _id: courseId })
+        if (!courseId) {
+            return res.status(400).json({
+                success: false,
+                message: "Course ID is required",
+            });
+        }
+
+        const courseDetails = await Course.findById(courseId)
             .populate("category")
-            //.populate("ratingsAndreviews")
             .populate({
                 path: "instructor",
-                populate: { path: "additionalDetails" }, // Corrected syntax
+                populate: { path: "additionalDetails" },
             })
             .populate({
                 path: "courseContent",
-                populate: { path: "subSection" }, // Corrected syntax
+                populate: {
+                    path: "subSection", // Now, this is an array
+                    model: "SubSection", // Explicitly mention the model
+                },
             })
             .exec();
 
-        // If course is not found
         if (!courseDetails) {
             return res.status(404).json({
                 success: false,
@@ -130,11 +136,11 @@ exports.getCourseDetails = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error fetching course details:", error); // Log actual error
+        console.error("Error fetching course details:", error);
         return res.status(500).json({
             success: false,
             message: "Course details not fetched",
-            error: error.message, // Send error message for debugging
+            error: error.message,
         });
     }
 };
